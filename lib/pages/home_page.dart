@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_home_ui/util/smart_device_box.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -8,6 +9,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List mySmartDevices = [
+    ["Smart Light", "lib/icons/light-bulb.png", false],
+    ["Smart Ac", "lib/icons/air-conditioner.png", false],
+    ["Smart Tv", "lib/icons/smart-tv.png", false],
+    ["Smart Fan", "lib/icons/fan.png", true],
+  ];
+
+  //powerSwitchChanged
+
+  void powerSwitchChanged(bool value, int index) {
+    setState(() {
+      mySmartDevices[index][2] = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,36 +52,57 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 0),
 
           //Welcome keerthivasan
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 35),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Welcome Home"),
                 Text(
-                  "Hello Keerthivasan",
-                  style: TextStyle(fontSize: 40),
+                  "Welcome Home",
+                  style: TextStyle(fontSize: 30),
+                ),
+                Text(
+                  "Vasan ",
+                  style: TextStyle(fontSize: 50),
                 )
               ],
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
+
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 40),
+            child: Divider(
+              color: Colors.grey,
+              thickness: 1,
+            ),
+          ),
 
           //smart device +grid
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            child: Text('Smart Devices'),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 40),
+            child: Text(
+              'Smart Devices',
+              style: TextStyle(fontSize: 20),
+            ),
           ),
 
           Expanded(
             child: GridView.builder(
-              gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+              padding: const EdgeInsets.all(20),
+              itemCount: mySmartDevices.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, childAspectRatio: 1 / 1.2),
               itemBuilder: (context, index) {
-                return Container();
+                return SmartDeviceBox(
+                  smartDeviceName: mySmartDevices[index][0],
+                  iconPath: mySmartDevices[index][1],
+                  powerOn: mySmartDevices[index][2],
+                  onChanged: (value) => powerSwitchChanged(value, index),
+                );
               },
             ),
           )
